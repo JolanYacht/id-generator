@@ -1,2 +1,2 @@
 # id-generator
-id-generator write in java
+Distributed unique id generator write in Java.
