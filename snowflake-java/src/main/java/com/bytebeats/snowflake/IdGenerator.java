@@ -10,7 +10,7 @@ package com.bytebeats.snowflake;
  * @create 2016-12-19 17:44
  */
 public class IdGenerator {
-    private final long twepoch = 1288834974657L;    //从某个时间戳起
+    private final long twepoch = 1480521600000L;    //2016-12-01 00:00:00
     private final long workerIdBits = 10L;   //机器标识位数
 
     private final long maxWorkerId = -1L ^ (-1L << workerIdBits);   //机器ID最大值
