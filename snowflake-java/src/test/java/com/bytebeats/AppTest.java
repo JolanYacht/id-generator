@@ -1,38 +1,23 @@
 package com.bytebeats;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import com.bytebeats.snowflake.IdWorker;
+import org.junit.Test;
+import java.util.Date;
 
-/**
- * Unit test for simple App.
- */
-public class AppTest 
-    extends TestCase
-{
-    /**
-     * Create the test case
-     *
-     * @param testName name of the test case
-     */
-    public AppTest( String testName )
-    {
-        super( testName );
+public class AppTest {
+
+    @Test
+    public void testApp() {
+
+        IdWorker worker = new IdWorker(0, 0);
+        System.out.println(worker.nextId());
     }
 
-    /**
-     * @return the suite of tests being tested
-     */
-    public static Test suite()
-    {
-        return new TestSuite( AppTest.class );
-    }
+    @Test
+    public void testTimestamp() {
 
-    /**
-     * Rigourous Test :-)
-     */
-    public void testApp()
-    {
-        assertTrue( true );
+        Date date = new Date(1288834974657L);
+        System.out.println(date);
+
     }
 }
