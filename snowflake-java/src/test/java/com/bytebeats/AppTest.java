@@ -6,7 +6,7 @@ import org.junit.Test;
 import java.util.Date;
 
 public class AppTest {
-    private int count = 10000;
+    private int count = 50000;
 
     @Test
     public void testIdGenerator() {
