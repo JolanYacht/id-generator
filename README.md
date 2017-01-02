@@ -1,8 +1,8 @@
 # id-generator
-Distributed unique id generator.
 
 ## 分布式唯一主键生成器
-众所周知，分库分表首先要解决的就是分布式唯一主键的问题，业界也有很多相关方案：
+众所周知，分库分表首先要解决的就是分布式唯一主键的问题，业界也有很多相关方案：<br>
+
 | 实现方案 | 优点 | 缺点 |
 | :----: | :----: | :----: |
 | UUID | 本地生成，不需要RPC，低延时； 扩展性好，基本没有性能上限 | 无法保证趋势递增；UUID过长128位，不易存储，往往用字符串表示 |
@@ -10,6 +10,23 @@ Distributed unique id generator.
 | proxy服务+数据库分段获取ID | 分布式生成，段用完后需要去DB获取，同server有序 | 可能产生数据空洞，即有些ID没有分配就被跳过了，主要原因是在服务重启的时候发生；|
 
 ### Snowflake
+Snowflake 生成的 unique ID 的组成 (由高位到低位):
+
+1. 41 bits: Timestamp (毫秒级)
+2. 10 bits: 节点 ID (datacenter ID 5 bits + worker ID 5 bits)
+3. 12 bits: sequence number
+
+一共 63 bits (最高位是 0)
+unique ID 生成过程:
+
+* 10 bits 的机器号, 在 ID 分配 Worker 启动的时候，从一个 Zookeeper 集群获取 (保证所有的 Worker 不会有重复的机器号)；
+* 41 bits 的 Timestamp: 每次要生成一个新 ID 的时候，都会获取一下当前的 Timestamp, 然后分两种情况生成 sequence number；
+* 如果当前的 Timestamp 和前一个已生成 ID 的 Timestamp 相同 (在同一毫秒中)，就用前一个 ID 的 sequence number + 1 作为新的 sequence number (12 bits);  
+  如果本毫秒内的所有 ID 用完，等到下一毫秒继续 (这个等待过程中, 不能分配出新的 ID)；
+* 如果当前的 Timestamp 比前一个 ID 的 Timestamp 大, 随机生成一个初始 sequence number (12bits) 作为本毫秒内的第一个 sequence number；
+
+整个过程中只是在 Worker 启动的时候会对外部有依赖 (需要从 Zookeeper 获取 Worker 号) 之后就可以独立工作了，做到了去中心化。
+
 
 ### Ticket服务
 通过一张通用的Ticket表来实现分布式ID的持久化，执行update更新语句来获取一批Ticket，这些获取到的Ticket会在内存中进行分配，分配完之后再从DB获取下一批Ticket。
