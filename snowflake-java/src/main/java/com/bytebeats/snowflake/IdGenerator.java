@@ -10,23 +10,26 @@ package com.bytebeats.snowflake;
  * @create 2016-12-19 17:44
  */
 public class IdGenerator {
-    private final long twepoch = 1480521600000L;    //2016-12-01 00:00:00
-    private final long workerIdBits = 10L;   //机器标识位数
+    private final long EPOCH = 1480521600000L;    //2016-12-01 00:00:00
 
-    private final long maxWorkerId = -1L ^ (-1L << workerIdBits);   //机器ID最大值
-    private final long sequenceBits = 12L;  //毫秒内自增位
+    public static final long WORKER_ID_BITS = 10L;   //机器标识位数
+    public static final long SEQUENCE_BITS = 12L;  //毫秒内自增位
 
-    private final long workerIdShift = sequenceBits;    //机器ID偏左移12位
-    private final long timestampLeftShift = sequenceBits + workerIdBits; //时间毫秒左移22位
-    private final long sequenceMask = -1L ^ (-1L << sequenceBits);
+    private static final long MAX_WORKER_ID = -1L ^ (-1L << WORKER_ID_BITS);   //机器ID最大值
+
+    private static final long WORKER_ID_LEFT_SHIFT_BITS = SEQUENCE_BITS;    //机器ID偏左移12位
+
+    private static final long TIMESTAMP_LEFT_SHIFT_BITS  = SEQUENCE_BITS + WORKER_ID_BITS; //时间毫秒左移22位
+
+    private static final long SEQUENCE_MASK = (1 << SEQUENCE_BITS) - 1;
 
     private long workerId;
     private long sequence = 0L;
     private long lastTimestamp = -1L;
 
     public IdGenerator(long workerId) {
-        if (workerId > maxWorkerId || workerId < 0) {
-            throw new IllegalArgumentException(String.format("worker Id can't be greater than %d or less than 0", maxWorkerId));
+        if (workerId > MAX_WORKER_ID || workerId < 0) {
+            throw new IllegalArgumentException(String.format("worker Id can't be greater than %d or less than 0", MAX_WORKER_ID));
         }
         this.workerId = workerId;
     }
@@ -37,9 +40,8 @@ public class IdGenerator {
             throw new RuntimeException(String.format("Clock moved backwards.  Refusing to generate id for %d milliseconds", lastTimestamp - timestamp));
         }
         if (lastTimestamp == timestamp) {
-            sequence = (sequence + 1) & sequenceMask;
-            if (sequence == 0) {
-                timestamp = tilNextMillis(lastTimestamp);
+            if (0L == (++sequence & SEQUENCE_MASK)) {
+                timestamp = waitUntilNextMillis(lastTimestamp);
             }
         } else {
             sequence = 0L;
@@ -47,10 +49,10 @@ public class IdGenerator {
 
         lastTimestamp = timestamp;
 
-        return ((timestamp - twepoch) << timestampLeftShift) | (workerId << workerIdShift) | sequence;
+        return ((timestamp - EPOCH) << TIMESTAMP_LEFT_SHIFT_BITS) | (workerId << WORKER_ID_LEFT_SHIFT_BITS) | sequence;
     }
 
-    protected long tilNextMillis(long lastTimestamp) {
+    private long waitUntilNextMillis(long lastTimestamp) {
         long timestamp = timeGen();
         while (timestamp <= lastTimestamp) {
             timestamp = timeGen();
