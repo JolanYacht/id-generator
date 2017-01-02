@@ -1,0 +1,10 @@
+CREATE TABLE `tb_ticket` (
+  `id` BIGINT(15) NOT NULL AUTO_INCREMENT COMMENT '自增id主键',
+  `tag` VARCHAR(40) NOT NULL COMMENT'业务tag',
+  `max_id` BIGINT(20) NOT NULL COMMENT'当前该Tag已分配出去的最大ID值',
+  `step` INT(6) NOT NULL COMMENT'号段长度',
+  `desc` VARCHAR(200) NOT NULL COMMENT'desc',
+  `create_time` TIMESTAMP NOT NULL COMMENT'创建时间',
+  `update_time` TIMESTAMP NOT NULL COMMENT'更新时间',
+  PRIMARY KEY (`ID`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8 COMMENT'Ticket服务表';
