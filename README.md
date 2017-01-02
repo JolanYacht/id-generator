@@ -1,5 +1,4 @@
 # id-generator
-Distributed unique id generator.
 
 ## 分布式唯一主键生成器
 众所周知，分库分表首先要解决的就是分布式唯一主键的问题，业界也有很多相关方案：<br>
