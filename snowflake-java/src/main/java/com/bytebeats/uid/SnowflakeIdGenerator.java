@@ -7,10 +7,10 @@ package com.bytebeats.uid;
  * 3. 12位自增序列号（12位顺序号支持每个节点每毫秒产生4096个ID序号）
  *
  * @author Ricky Fung
- * @create 2016-12-19 17:44
  */
-public class TwitterIdGenerator {
-    private final long EPOCH = 1480521600000L;    //2016-12-01 00:00:00
+public class SnowflakeIdGenerator implements IdGenerator {
+
+    private long epoch;    //纪元
 
     public static final long WORKER_ID_BITS = 10L;   //机器标识位数
     public static final long SEQUENCE_BITS = 12L;  //毫秒内自增位
@@ -27,14 +27,23 @@ public class TwitterIdGenerator {
     private long sequence = 0L;
     private long lastTimestamp = -1L;
 
-    public TwitterIdGenerator(long workerId) {
-        if (workerId > MAX_WORKER_ID || workerId < 0) {
-            throw new IllegalArgumentException(String.format("worker Id can't be greater than %d or less than 0", MAX_WORKER_ID));
-        }
-        this.workerId = workerId;
+    public SnowflakeIdGenerator(long workerId) {
+        this(workerId, 1480521600000L);
     }
 
-    public synchronized long nextId() {
+    public SnowflakeIdGenerator(long workerId, long epoch) {
+        if (workerId > MAX_WORKER_ID || workerId < 0) {
+            throw new IllegalArgumentException(String.format("workerId must in [0, %d]", MAX_WORKER_ID));
+        }
+        this.workerId = workerId;
+        if(epoch<0 || epoch>System.currentTimeMillis()){
+            throw new IllegalArgumentException(String.format("epoch must in (0, %d]", System.currentTimeMillis()));
+        }
+        this.epoch = epoch;
+    }
+
+    @Override
+    public synchronized long getUid() {
         long timestamp = timeGen();
         if (timestamp < lastTimestamp) {
             throw new RuntimeException(String.format("Clock moved backwards.  Refusing to generate id for %d milliseconds", lastTimestamp - timestamp));
@@ -49,7 +58,13 @@ public class TwitterIdGenerator {
 
         lastTimestamp = timestamp;
 
-        return ((timestamp - EPOCH) << TIMESTAMP_LEFT_SHIFT_BITS) | (workerId << WORKER_ID_LEFT_SHIFT_BITS) | sequence;
+        return ((timestamp - epoch) << TIMESTAMP_LEFT_SHIFT_BITS) | (workerId << WORKER_ID_LEFT_SHIFT_BITS) | sequence;
+    }
+
+    @Override
+    public String parseUid(long uid) {
+
+        return null;
     }
 
     private long waitUntilNextMillis(long lastTimestamp) {
@@ -60,8 +75,7 @@ public class TwitterIdGenerator {
         return timestamp;
     }
 
-    protected long timeGen() {
+    private long timeGen() {
         return System.currentTimeMillis();
     }
-
 }
