@@ -13,9 +13,15 @@ public class IdGeneratorBuilder {
     private static final String DATE_FORMAT = "yyyy-MM-dd";
 
     private String zkAddress;
+    private String namespace;
     private long workId;
     private long epoch;
     private String epochStr;
+
+    public IdGeneratorBuilder namespace(String namespace) {
+        this.namespace = namespace;
+        return this;
+    }
 
     public IdGeneratorBuilder zkAddress(String zkAddress) {
         this.zkAddress = zkAddress;

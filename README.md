@@ -36,6 +36,7 @@ unique ID 生成过程:
 ```
     IdGenerator idGenerator = new IdGeneratorBuilder()
                 .zkAddress("localhost:2181")
+                .namespace("/myapp/uid/worker")
                 .epoch(1480521600000L)
                 .build();
 

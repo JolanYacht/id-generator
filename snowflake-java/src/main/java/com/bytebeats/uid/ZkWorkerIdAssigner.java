@@ -33,13 +33,18 @@ public class ZkWorkerIdAssigner implements WorkerIdAssigner {
         CuratorFramework client = null;
         try {
             client = initZk(zkAddress);
-            String path = namespace + "/id-";
-            String result = client.create().creatingParentsIfNeeded().withMode(CreateMode.EPHEMERAL_SEQUENTIAL).forPath(path, ip.getBytes());
-            System.out.println(result);
-
             List<String> children = client.getChildren().forPath(namespace);
             System.out.println(children);
-            return 0;
+
+            long id = 0;
+            if(children==null || children.size()==0){
+                String path = namespace + "/"+id;
+                String result = client.create().creatingParentsIfNeeded().withMode(CreateMode.EPHEMERAL).forPath(path, ip.getBytes());
+                System.out.println(result);
+            } else {
+
+            }
+            return id;
         } catch (Exception e) {
             logger.error("", e);
             throw new RuntimeException("create node failed", e);
