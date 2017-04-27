@@ -1,7 +1,7 @@
-package com.bytebeats.snowflake;
+package com.bytebeats.uid;
 
 /**
- * Twitter Snowflake
+ * Instagram
  * 1. 41位为时间戳
  * 2. 5位datacenterId
  * 3. 5位workerId(10位的长度最多支持部署1024个节点）
@@ -10,7 +10,7 @@ package com.bytebeats.snowflake;
  * @author Ricky Fung
  * @create 2016-12-19 17:44
  */
-public class IdWorker {
+public class InstagramIdGenerator {
     public static final long TWITTER_EPOCH = 1288834974657L;    //从某个时间戳起
 
     public static final long WORKER_ID_BITS = 5L;   //机器标识位数
@@ -31,7 +31,7 @@ public class IdWorker {
     private long sequence = 0L;
     private long lastTimestamp = -1L;
 
-    public IdWorker(long workerId, long datacenterId) {
+    public InstagramIdGenerator(long workerId, long datacenterId) {
         if (workerId > MAX_WORKER_ID || workerId < 0) {
             throw new IllegalArgumentException(String.format("worker Id can't be greater than %d or less than 0", MAX_WORKER_ID));
         }

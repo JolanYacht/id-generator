@@ -1,4 +1,4 @@
-package com.bytebeats.snowflake;
+package com.bytebeats.uid;
 
 /**
  * ${DESCRIPTION}
@@ -16,7 +16,7 @@ public class BenchmarkTest {
 
     private void testSnowflake() {
 
-        IdWorker worker = new IdWorker(0, 0);
+        InstagramIdGenerator worker = new InstagramIdGenerator(0, 0);
         long start = System.currentTimeMillis();
         int i= 0;
         while(i<count){

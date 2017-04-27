@@ -1,7 +1,7 @@
-package com.bytebeats.snowflake;
+package com.bytebeats.uid;
 
 /**
- *
+ * Twitter Snowflake
  * 1. 41位为时间戳
  * 2. 10位workerId(10位的长度最多支持部署1024个节点）
  * 3. 12位自增序列号（12位顺序号支持每个节点每毫秒产生4096个ID序号）
@@ -9,7 +9,7 @@ package com.bytebeats.snowflake;
  * @author Ricky Fung
  * @create 2016-12-19 17:44
  */
-public class IdGenerator {
+public class TwitterIdGenerator {
     private final long EPOCH = 1480521600000L;    //2016-12-01 00:00:00
 
     public static final long WORKER_ID_BITS = 10L;   //机器标识位数
@@ -27,7 +27,7 @@ public class IdGenerator {
     private long sequence = 0L;
     private long lastTimestamp = -1L;
 
-    public IdGenerator(long workerId) {
+    public TwitterIdGenerator(long workerId) {
         if (workerId > MAX_WORKER_ID || workerId < 0) {
             throw new IllegalArgumentException(String.format("worker Id can't be greater than %d or less than 0", MAX_WORKER_ID));
         }
