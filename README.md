@@ -1,7 +1,11 @@
 # id-generator
+[![License](https://img.shields.io/badge/license-Apache%202-green.svg)](https://www.apache.org/licenses/LICENSE-2.0) [![Release Version](https://img.shields.io/badge/release-0.1.0-red.svg)](https://github.com/TiFG/id-generator/releases) [![Build Status](https://travis-ci.org/TiFG/id-generator.svg?branch=master)](https://travis-ci.org/TiFG/id-generator)
+
+## Overview
+A Java implemented, Snowflake based unique ID generator.
 
 ## Snowflake
-Snowflake 生成的 unique ID 的组成 (由高位到低位):
+[Twitter Snowflake](https://github.com/twitter/snowflake) 生成的 unique ID 的组成 (由高位到低位):
 
 1. 41 bits: Timestamp (毫秒级)
 2. 10 bits: 节点 ID (datacenter ID 5 bits + worker ID 5 bits)
@@ -19,29 +23,11 @@ unique ID 生成过程:
 整个过程中只是在 Worker 启动的时候会对外部有依赖 (需要从 Zookeeper 获取 Worker 号) 之后就可以独立工作了，做到了去中心化。
 
 
-## 使用
-1. 硬编码workId
-```
-    IdGenerator idGenerator = new IdGeneratorBuilder()
-            .workId(1L)
-            .epoch(1480521600000L)
-            .build();
+## Requirements
+The minimum requirements to run the quick start are:
+* JDK 1.7 or above
+* A java-based project management software like [Maven](https://maven.apache.org/) or [Gradle](http://gradle.org/)
 
-    long uid = idGenerator.getUid();
-    String extra = idGenerator.parseUid(uid);
-    System.out.println(extra);
-```
+## Quick Start
 
-2.使用Zookeeper获取workId
-```
-    IdGenerator idGenerator = new IdGeneratorBuilder()
-                .zkAddress("localhost:2181")
-                .namespace("/myapp/uid/worker")
-                .epoch(1480521600000L)
-                .build();
-
-    long uid = idGenerator.getUid();
-    String extra = idGenerator.parseUid(uid);
-    System.out.println(extra);
-
-```
+[简明教程](docs/wiki/cn_quick_start.md)
