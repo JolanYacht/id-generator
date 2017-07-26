@@ -1,4 +1,6 @@
-package juice.uid.generator;
+package juice.uid;
+
+import juice.uid.generator.InstagramIdGenerator;
 
 /**
  * ${DESCRIPTION}

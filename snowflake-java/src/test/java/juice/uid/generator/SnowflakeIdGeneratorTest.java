@@ -1,5 +1,10 @@
 package juice.uid.generator;
 
+import juice.uid.DefaultIdGeneratorFactory;
+import juice.uid.IdGeneratorFactory;
+import juice.uid.assigner.DefaultWorkerIdAssigner;
+import juice.uid.assigner.ZookeeperWorkerIdAssigner;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -10,14 +15,13 @@ import org.junit.Test;
  */
 public class SnowflakeIdGeneratorTest {
 
+    private IdGeneratorFactory factory = new DefaultIdGeneratorFactory();
+
     @Test
+    @Ignore
     public void testGetUidWithZk(){
 
-        IdGenerator idGenerator = new IdGeneratorBuilder()
-                .zkAddress("localhost:2181")
-                .namespace("/myapp/uid/worker")
-                .epoch(1480521600000L)
-                .build();
+        IdGenerator idGenerator = factory.createIdGenerator(new ZookeeperWorkerIdAssigner("localhost:2181", "/juice/uid/worker"), 1480521600000L);
 
         long uid = idGenerator.getUid();
         String extra = idGenerator.parseUid(uid);
@@ -27,11 +31,7 @@ public class SnowflakeIdGeneratorTest {
     @Test
     public void testGetUid(){
 
-        IdGenerator idGenerator = new IdGeneratorBuilder()
-                .workId(1L)
-                .epoch(1480521600000L)
-                .build();
-
+        IdGenerator idGenerator = factory.createIdGenerator(new DefaultWorkerIdAssigner(1L), 1480521600000L);
         long uid = idGenerator.getUid();
         String extra = idGenerator.parseUid(uid);
         System.out.println(extra);

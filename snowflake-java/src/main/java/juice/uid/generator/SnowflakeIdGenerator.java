@@ -1,5 +1,7 @@
 package juice.uid.generator;
 
+import juice.uid.assigner.WorkerIdAssigner;
+
 /**
  * Twitter Snowflake
  * 1. 41位为时间戳
@@ -27,8 +29,8 @@ public class SnowflakeIdGenerator implements IdGenerator {
     private long sequence = 0L;
     private long lastTimestamp = -1L;
 
-    public SnowflakeIdGenerator(long workerId) {
-        this(workerId, 1480521600000L);
+    public SnowflakeIdGenerator(WorkerIdAssigner workerIdAssigner, long epoch) {
+        this(workerIdAssigner.getWorkId(), epoch);
     }
 
     public SnowflakeIdGenerator(long workerId, long epoch) {

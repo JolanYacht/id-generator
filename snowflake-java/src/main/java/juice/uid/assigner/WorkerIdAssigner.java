@@ -1,4 +1,4 @@
-package juice.uid.generator;
+package juice.uid.assigner;
 
 /**
  * ${DESCRIPTION}
