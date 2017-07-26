@@ -1,4 +1,4 @@
-package com.bytebeats.uid;
+package juice.uid.generator;
 
 import org.junit.Test;
 

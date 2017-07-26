@@ -1,4 +1,4 @@
-package com.bytebeats.uid;
+package juice.uid.generator;
 
 /**
  * 全局唯一id生成器
