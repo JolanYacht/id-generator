@@ -15,13 +15,13 @@ import org.junit.Test;
  */
 public class SnowflakeIdGeneratorTest {
 
-    private IdGeneratorFactory factory = new DefaultIdGeneratorFactory();
+    private final IdGeneratorFactory factory = new DefaultIdGeneratorFactory();
 
     @Test
     @Ignore
     public void testGetUidWithZk(){
 
-        IdGenerator idGenerator = factory.createIdGenerator(new ZookeeperWorkerIdAssigner("localhost:2181", "/juice/uid/worker"), 1480521600000L);
+        IdGenerator idGenerator = factory.createIdGenerator(new ZookeeperWorkerIdAssigner("127.0.0.1:2181", "/juice/uid/worker"), 1480521600000L);
 
         long uid = idGenerator.getUid();
         String extra = idGenerator.parseUid(uid);

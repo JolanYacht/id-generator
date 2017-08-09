@@ -7,10 +7,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>snowflake-java</artifactId>
+    <artifactId>id-generator-snowflake</artifactId>
     <packaging>jar</packaging>
 
-    <name>snowflake-java</name>
+    <name>id-generator-snowflake</name>
     <url>http://maven.apache.org</url>
 
     <properties>
@@ -18,11 +18,10 @@
     </properties>
 
     <dependencies>
-        <!--zookeeper-->
         <dependency>
-            <groupId>org.apache.zookeeper</groupId>
-            <artifactId>zookeeper</artifactId>
-            <version>${zookeeper.version}</version>
+            <groupId>com.101tec</groupId>
+            <artifactId>zkclient</artifactId>
+            <version>${zkclient.version}</version>
         </dependency>
     </dependencies>
 </project>

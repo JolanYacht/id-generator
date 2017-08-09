@@ -12,11 +12,11 @@
   <url>http://maven.apache.org</url>
 
   <modules>
-    <module>snowflake-java</module>
+    <module>id-generator-snowflake</module>
   </modules>
 
   <properties>
-    <zookeeper.version>3.4.10</zookeeper.version>
+    <zkclient.version>0.10</zkclient.version>
     <java.version>1.7</java.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
