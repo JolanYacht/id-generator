@@ -67,7 +67,7 @@ public class SnowflakeIdGenerator implements IdGenerator {
     public String parseUid(long uid) {
 
         long tt = (uid >> TIMESTAMP_LEFT_SHIFT_BITS) + epoch;
-        long worker = (uid >> WORKER_ID_LEFT_SHIFT_BITS) & ((1 << SEQUENCE_BITS) - 1);
+        long worker = (uid >> WORKER_ID_LEFT_SHIFT_BITS) & ((1 << WORKER_ID_BITS) - 1);
         long seq = uid & SEQUENCE_MASK;
 
         StringBuilder sb = new StringBuilder(128);

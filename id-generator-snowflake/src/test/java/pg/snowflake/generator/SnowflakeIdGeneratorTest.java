@@ -31,15 +31,15 @@ public class SnowflakeIdGeneratorTest {
     @Test
     public void testGetUid(){
 
-        IdGenerator idGenerator = factory.createIdGenerator(new DefaultWorkerIdAssigner(1L), 1480521600000L);
+        IdGenerator idGenerator = factory.createIdGenerator(new DefaultWorkerIdAssigner(0L), 1480521600000L);
 
         long uid = idGenerator.getUid();
         String extra = idGenerator.parseUid(uid);
-        System.out.println(extra);
+        System.out.println(uid+"\t"+extra);
 
         uid = idGenerator.getUid();
         extra = idGenerator.parseUid(uid);
-        System.out.println(extra);
+        System.out.println(uid+"\t"+extra);
 
         System.out.println("timestamp:"+System.currentTimeMillis());
     }
