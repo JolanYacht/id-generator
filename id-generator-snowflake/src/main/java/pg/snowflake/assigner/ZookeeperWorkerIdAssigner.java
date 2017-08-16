@@ -1,12 +1,11 @@
-package juice.uid.assigner;
+package pg.snowflake.assigner;
 
-import juice.uid.util.NetUtils;
 import org.I0Itec.zkclient.ZkClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import pg.snowflake.util.NetUtils;
 
 import java.net.InetAddress;
-import java.util.BitSet;
 import java.util.List;
 
 /**
@@ -52,7 +51,10 @@ public class ZookeeperWorkerIdAssigner implements WorkerIdAssigner {
         zkClient.createPersistent(namespace, true);
 
         List<String> children = zkClient.getChildren(namespace);
-        if(children!=null && children.size()>MAX_CHILDREN_SIZE) {
+        if(children==null || children.isEmpty()) {
+            return 0;
+        }
+        if(children.size() >= MAX_CHILDREN_SIZE) {
             throw new IllegalStateException(String.format("children size > %s in namespace:%s", MAX_CHILDREN_SIZE, namespace));
         }
 
@@ -60,21 +62,7 @@ public class ZookeeperWorkerIdAssigner implements WorkerIdAssigner {
         String result = zkClient.createEphemeralSequential(path, ip);
         logger.info("create node path:{}, result:{}", path, result);
 
-        if(children==null || children.size()==0) {
-            return 0;
-        }
-
-        BitSet bs = new BitSet(MAX_CHILDREN_SIZE);
-        int index;
-        for(String child : children) {
-            index = parseId(child)%1024;
-            bs.set(index);
-        }
-        index = parseId(result)%1024;
-        if(bs.get(index)) {
-            throw new IllegalStateException("worker id:"+index+" is already used.");
-        }
-        return index;
+        return children.size();
     }
 
     private void initZooKeeper(String zkAddress, int sessionTimeout, int connectTimeout) {

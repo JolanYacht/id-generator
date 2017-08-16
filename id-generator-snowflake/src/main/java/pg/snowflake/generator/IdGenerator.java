@@ -1,4 +1,4 @@
-package juice.uid.generator;
+package pg.snowflake.generator;
 
 /**
  * 全局唯一id生成器

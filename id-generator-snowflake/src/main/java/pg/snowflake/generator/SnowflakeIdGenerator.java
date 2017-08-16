@@ -1,6 +1,6 @@
-package juice.uid.generator;
+package pg.snowflake.generator;
 
-import juice.uid.assigner.WorkerIdAssigner;
+import pg.snowflake.assigner.WorkerIdAssigner;
 
 /**
  * Twitter Snowflake
@@ -66,7 +66,15 @@ public class SnowflakeIdGenerator implements IdGenerator {
     @Override
     public String parseUid(long uid) {
 
-        return null;
+        long tt = (uid >> TIMESTAMP_LEFT_SHIFT_BITS) + epoch;
+        long worker = (uid >> WORKER_ID_LEFT_SHIFT_BITS) & ((1 << SEQUENCE_BITS) - 1);
+        long seq = uid & SEQUENCE_MASK;
+
+        StringBuilder sb = new StringBuilder(128);
+        sb.append('{').append('"').append("timestamp").append('"').append(':').append(tt).append(',')
+                .append('"').append("workerId").append('"').append(':').append(worker).append(',')
+                .append('"').append("sequence").append('"').append(':').append(seq).append('}');
+        return sb.toString();
     }
 
     private long waitUntilNextMillis(long lastTimestamp) {

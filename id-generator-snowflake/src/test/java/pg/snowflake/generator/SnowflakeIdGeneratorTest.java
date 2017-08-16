@@ -1,9 +1,9 @@
-package juice.uid.generator;
+package pg.snowflake.generator;
 
-import juice.uid.DefaultIdGeneratorFactory;
-import juice.uid.IdGeneratorFactory;
-import juice.uid.assigner.DefaultWorkerIdAssigner;
-import juice.uid.assigner.ZookeeperWorkerIdAssigner;
+import pg.snowflake.DefaultIdGeneratorFactory;
+import pg.snowflake.IdGeneratorFactory;
+import pg.snowflake.assigner.DefaultWorkerIdAssigner;
+import pg.snowflake.assigner.ZookeeperWorkerIdAssigner;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -32,9 +32,16 @@ public class SnowflakeIdGeneratorTest {
     public void testGetUid(){
 
         IdGenerator idGenerator = factory.createIdGenerator(new DefaultWorkerIdAssigner(1L), 1480521600000L);
+
         long uid = idGenerator.getUid();
         String extra = idGenerator.parseUid(uid);
         System.out.println(extra);
+
+        uid = idGenerator.getUid();
+        extra = idGenerator.parseUid(uid);
+        System.out.println(extra);
+
+        System.out.println("timestamp:"+System.currentTimeMillis());
     }
 
 

@@ -1,4 +1,4 @@
-package juice.uid.util;
+package pg.snowflake.util;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

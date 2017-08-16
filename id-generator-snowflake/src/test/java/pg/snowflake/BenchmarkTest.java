@@ -1,6 +1,6 @@
-package juice.uid;
+package pg.snowflake;
 
-import juice.uid.generator.InstagramIdGenerator;
+import pg.snowflake.generator.InstagramIdGenerator;
 
 /**
  * ${DESCRIPTION}

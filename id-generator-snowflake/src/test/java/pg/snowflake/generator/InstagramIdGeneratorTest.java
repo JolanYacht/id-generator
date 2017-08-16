@@ -1,4 +1,4 @@
-package juice.uid.generator;
+package pg.snowflake.generator;
 
 import org.junit.Test;
 

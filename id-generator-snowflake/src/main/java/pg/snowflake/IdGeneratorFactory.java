@@ -1,7 +1,7 @@
-package juice.uid;
+package pg.snowflake;
 
-import juice.uid.assigner.WorkerIdAssigner;
-import juice.uid.generator.IdGenerator;
+import pg.snowflake.assigner.WorkerIdAssigner;
+import pg.snowflake.generator.IdGenerator;
 
 /**
  * @author Ricky Fung

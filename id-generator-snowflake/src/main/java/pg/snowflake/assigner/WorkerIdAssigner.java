@@ -1,4 +1,4 @@
-package juice.uid.assigner;
+package pg.snowflake.assigner;
 
 /**
  * ${DESCRIPTION}
