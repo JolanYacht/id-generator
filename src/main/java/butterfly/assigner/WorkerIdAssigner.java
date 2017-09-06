@@ -1,4 +1,4 @@
-package pg.snowflake.assigner;
+package butterfly.assigner;
 
 /**
  * ${DESCRIPTION}

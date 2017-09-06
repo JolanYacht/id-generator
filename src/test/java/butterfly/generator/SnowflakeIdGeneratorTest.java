@@ -1,9 +1,9 @@
-package pg.snowflake.generator;
+package butterfly.generator;
 
-import pg.snowflake.DefaultIdGeneratorFactory;
-import pg.snowflake.IdGeneratorFactory;
-import pg.snowflake.assigner.DefaultWorkerIdAssigner;
-import pg.snowflake.assigner.ZookeeperWorkerIdAssigner;
+import butterfly.DefaultIdGeneratorFactory;
+import butterfly.IdGeneratorFactory;
+import butterfly.assigner.impl.DefaultWorkerIdAssigner;
+import butterfly.assigner.impl.ZookeeperWorkerIdAssigner;
 import org.junit.Ignore;
 import org.junit.Test;
 

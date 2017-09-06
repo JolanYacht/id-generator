@@ -1,4 +1,4 @@
-package pg.snowflake.generator;
+package butterfly.generator;
 
 import org.junit.Test;
 
@@ -13,13 +13,13 @@ public class InstagramIdGeneratorTest {
     final int count = 1000* 1000;
 
     @Test
-    public void testId(){
+    public void benchmark(){
 
         InstagramIdGenerator idGenerator = new InstagramIdGenerator(1L, 1L);
-        long start = System.nanoTime();
+        long start = System.currentTimeMillis();
         for(int i=0; i<count; i++){
             idGenerator.nextId();
         }
-        System.out.println("耗时:"+(System.nanoTime() - start)+"nanoseconds");
+        System.out.println(String.format("gen %d ids cost:%d millis", count, (System.currentTimeMillis() - start)));
     }
 }

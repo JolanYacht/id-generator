@@ -1,7 +1,7 @@
-package pg.snowflake;
+package butterfly;
 
-import pg.snowflake.assigner.WorkerIdAssigner;
-import pg.snowflake.generator.IdGenerator;
+import butterfly.assigner.WorkerIdAssigner;
+import butterfly.generator.IdGenerator;
 
 /**
  * @author Ricky Fung

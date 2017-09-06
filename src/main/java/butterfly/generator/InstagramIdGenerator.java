@@ -1,4 +1,4 @@
-package pg.snowflake.generator;
+package butterfly.generator;
 
 /**
  * Instagram

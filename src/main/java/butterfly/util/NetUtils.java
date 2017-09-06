@@ -1,8 +1,9 @@
-package pg.snowflake.util;
+package butterfly.util;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.management.ManagementFactory;
 import java.net.*;
 import java.util.Enumeration;
 import java.util.Map;
@@ -53,6 +54,14 @@ public abstract class NetUtils {
         }
 
         return localAddress;
+    }
+
+    public static int getPid() {
+        String name = ManagementFactory.getRuntimeMXBean().getName();
+        System.out.println(name);
+        // get pid
+        String pid = name.split("@")[0];
+        return Integer.parseInt(pid);
     }
 
     private static InetAddress getLocalAddressByHostname() {

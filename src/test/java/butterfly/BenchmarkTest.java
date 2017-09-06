@@ -1,6 +1,6 @@
-package pg.snowflake;
+package butterfly;
 
-import pg.snowflake.generator.InstagramIdGenerator;
+import butterfly.generator.InstagramIdGenerator;
 
 /**
  * ${DESCRIPTION}

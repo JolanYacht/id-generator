@@ -1,11 +1,13 @@
-package pg.snowflake.assigner;
+package butterfly.assigner.impl;
 
+import butterfly.assigner.WorkerIdAssigner;
+import butterfly.util.NetUtils;
 import org.I0Itec.zkclient.ZkClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import pg.snowflake.util.NetUtils;
 
 import java.net.InetAddress;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -20,7 +22,6 @@ public class ZookeeperWorkerIdAssigner implements WorkerIdAssigner {
     private int connectTimeout;
     private ZkClient zkClient;
     private static final String PREFIX = "worker_";
-    private static final int MAX_CHILDREN_SIZE = 1024;
 
     public ZookeeperWorkerIdAssigner(String zkAddress, String namespace) {
         this(zkAddress, 60 * 1000, 5000, namespace);
@@ -36,33 +37,38 @@ public class ZookeeperWorkerIdAssigner implements WorkerIdAssigner {
 
     @Override
     public long getWorkId() {
-        InetAddress address = NetUtils.getLocalAddress();
-        String ip = "N/A";
-        if(address!=null) {
-            ip = NetUtils.getLocalAddress().getHostAddress();
-        }
-        String path;
+
+        //创建根节点
+        zkClient.createPersistent(namespace, true);
+
+        String hostInfo = getHostInfo();
+        String path;    //worker node path
         if(namespace.endsWith("/")) {
             path = namespace + PREFIX;
         } else {
             path = namespace + "/"+ PREFIX;
         }
-
-        zkClient.createPersistent(namespace, true);
+        logger.info("create node path:{}, data:{}", path, hostInfo);
+        String node = zkClient.createEphemeralSequential(path, hostInfo);
+        logger.info("create node path:{}, result:{}", path, node);
 
         List<String> children = zkClient.getChildren(namespace);
         if(children==null || children.isEmpty()) {
             return 0;
         }
-        if(children.size() >= MAX_CHILDREN_SIZE) {
-            throw new IllegalStateException(String.format("children size > %s in namespace:%s", MAX_CHILDREN_SIZE, namespace));
+        Collections.sort(children);
+        int id = 0;
+        for (int i=0; i<children.size(); i++) {
+            if(node.endsWith(children.get(i))) {
+                id = i;
+                break;
+            }
         }
+        return id;
+    }
 
-        logger.info("create node path:{}, data:{}", path, ip);
-        String result = zkClient.createEphemeralSequential(path, ip);
-        logger.info("create node path:{}, result:{}", path, result);
-
-        return children.size();
+    public void close() {
+        zkClient.close();
     }
 
     private void initZooKeeper(String zkAddress, int sessionTimeout, int connectTimeout) {
@@ -72,22 +78,20 @@ public class ZookeeperWorkerIdAssigner implements WorkerIdAssigner {
         logger.info("init ZooKeeper address:{} over!", zkAddress);
     }
 
-    public int parseId(String child) {
-        String str = child.substring(child.lastIndexOf("_")+1);
-        if(str.startsWith("0")) {
-            return Integer.parseInt(str.substring(str.indexOf("0")+1));
+    private String getHostInfo() {
+        InetAddress address = NetUtils.getLocalAddress();
+        String ip = "N/A";
+        if(address!=null) {
+            ip = NetUtils.getLocalAddress().getHostAddress();
         }
-        return Integer.parseInt(str);
-    }
-
-    public void close() {
-        zkClient.close();
+        int pid = NetUtils.getPid();
+        return String.format("%s:%s", ip, pid);
     }
 
     public static void main(String[] args) {
 
-        ZookeeperWorkerIdAssigner assigner = new ZookeeperWorkerIdAssigner("127.0.0.1:2181", "/juice/uid/worker");
-        System.out.println(assigner.parseId("/juice/uid/worker/worker_1000000001"));
+        ZookeeperWorkerIdAssigner assigner = new ZookeeperWorkerIdAssigner("127.0.0.1:2181", "/pg/uid/worker");
+        System.out.println(assigner.getWorkId());
         assigner.close();
     }
 }

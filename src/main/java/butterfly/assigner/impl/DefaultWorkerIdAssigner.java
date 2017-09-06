@@ -1,4 +1,6 @@
-package pg.snowflake.assigner;
+package butterfly.assigner.impl;
+
+import butterfly.assigner.WorkerIdAssigner;
 
 /**
  * 人工指定workerId

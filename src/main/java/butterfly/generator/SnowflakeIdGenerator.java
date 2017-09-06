@@ -1,6 +1,6 @@
-package pg.snowflake.generator;
+package butterfly.generator;
 
-import pg.snowflake.assigner.WorkerIdAssigner;
+import butterfly.assigner.WorkerIdAssigner;
 
 /**
  * Twitter Snowflake
