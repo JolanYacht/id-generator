@@ -1,9 +1,9 @@
-package butterfly.generator;
+package butterfly;
 
-import butterfly.DefaultIdGeneratorFactory;
-import butterfly.IdGeneratorFactory;
-import butterfly.assigner.impl.DefaultWorkerIdAssigner;
+import butterfly.assigner.impl.SimpleWorkerIdAssigner;
 import butterfly.assigner.impl.ZookeeperWorkerIdAssigner;
+import butterfly.generator.IdGenerator;
+import butterfly.generator.SnowflakeIdGenerator;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -15,13 +15,11 @@ import org.junit.Test;
  */
 public class SnowflakeIdGeneratorTest {
 
-    private final IdGeneratorFactory factory = new DefaultIdGeneratorFactory();
-
     @Test
     @Ignore
-    public void testGetUidWithZk(){
+    public void testZkIdAssigner(){
 
-        IdGenerator idGenerator = factory.createIdGenerator(new ZookeeperWorkerIdAssigner("127.0.0.1:2181", "/juice/uid/worker"), 1480521600000L);
+        IdGenerator idGenerator = new SnowflakeIdGenerator(new ZookeeperWorkerIdAssigner("127.0.0.1:2181", "/pg/uid/worker", (long) (1<<12)), 1480521600000L);
 
         long uid = idGenerator.getUid();
         String extra = idGenerator.parseUid(uid);
@@ -29,9 +27,9 @@ public class SnowflakeIdGeneratorTest {
     }
 
     @Test
-    public void testGetUid(){
+    public void testSimpleIdAssigner(){
 
-        IdGenerator idGenerator = factory.createIdGenerator(new DefaultWorkerIdAssigner(0L), 1480521600000L);
+        IdGenerator idGenerator = new SnowflakeIdGenerator(new SimpleWorkerIdAssigner((long) (1<<12), 0L), 1480521600000L);
 
         long uid = idGenerator.getUid();
         String extra = idGenerator.parseUid(uid);

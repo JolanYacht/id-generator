@@ -1,6 +1,9 @@
 package butterfly;
 
-import butterfly.generator.InstagramIdGenerator;
+import butterfly.assigner.impl.SimpleWorkerIdAssigner;
+import butterfly.generator.IdGenerator;
+import butterfly.generator.SnowflakeIdGenerator;
+import org.junit.Test;
 
 /**
  * ${DESCRIPTION}
@@ -9,23 +12,17 @@ import butterfly.generator.InstagramIdGenerator;
  * @create 2016-12-19 18:12
  */
 public class BenchmarkTest {
-    private int count = 1000000;
+    private int count = 1000 * 1000;
 
-    public static void main(String[] args) {
+    @Test
+    public void testSnowflake() {
 
-        new BenchmarkTest().testSnowflake();
-    }
-
-    private void testSnowflake() {
-
-        InstagramIdGenerator worker = new InstagramIdGenerator(0, 0);
+        IdGenerator idGenerator = new SnowflakeIdGenerator(new SimpleWorkerIdAssigner((long) (1<<12), 1L), 1480521600000L);
         long start = System.currentTimeMillis();
-        int i= 0;
-        while(i<count){
-            worker.nextId();
-            i++;
+        for (int i=0; i<count; i++) {
+            idGenerator.getUid();
         }
         long cost = System.currentTimeMillis() - start;
-        System.out.println(cost+"ms,\t"+(count/cost)+"/ms");
+        System.out.println(String.format("gen %d ids cost:%d millis", count, cost));
     }
 }

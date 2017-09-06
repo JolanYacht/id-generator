@@ -1,16 +1,17 @@
 package butterfly.assigner.impl;
 
-import butterfly.assigner.WorkerIdAssigner;
+import butterfly.assigner.BaseWorkerIdAssigner;
 
 /**
  * 人工指定workerId
  * @author Ricky Fung
  */
-public class DefaultWorkerIdAssigner implements WorkerIdAssigner {
+public class SimpleWorkerIdAssigner extends BaseWorkerIdAssigner {
 
     private final long id;
 
-    public DefaultWorkerIdAssigner(long id) {
+    public SimpleWorkerIdAssigner(Long maxWorkerId, long id) {
+        super(maxWorkerId);
         this.id = id;
     }
 

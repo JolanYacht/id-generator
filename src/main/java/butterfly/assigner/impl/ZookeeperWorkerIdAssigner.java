@@ -1,6 +1,6 @@
 package butterfly.assigner.impl;
 
-import butterfly.assigner.WorkerIdAssigner;
+import butterfly.assigner.BaseWorkerIdAssigner;
 import butterfly.util.NetUtils;
 import org.I0Itec.zkclient.ZkClient;
 import org.slf4j.Logger;
@@ -14,7 +14,7 @@ import java.util.List;
  * 启动时通过Zookeeper获取workerId
  * @author Ricky Fung
  */
-public class ZookeeperWorkerIdAssigner implements WorkerIdAssigner {
+public class ZookeeperWorkerIdAssigner extends BaseWorkerIdAssigner {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private String zkAddress;
     private String namespace;
@@ -23,11 +23,12 @@ public class ZookeeperWorkerIdAssigner implements WorkerIdAssigner {
     private ZkClient zkClient;
     private static final String PREFIX = "worker_";
 
-    public ZookeeperWorkerIdAssigner(String zkAddress, String namespace) {
-        this(zkAddress, 60 * 1000, 5000, namespace);
+    public ZookeeperWorkerIdAssigner(String zkAddress, String namespace, Long maxWorkerId) {
+        this(zkAddress, 60 * 1000, 5000, namespace, maxWorkerId);
     }
 
-    public ZookeeperWorkerIdAssigner(String zkAddress, int sessionTimeout, int connectTimeout, String namespace) {
+    public ZookeeperWorkerIdAssigner(String zkAddress, int sessionTimeout, int connectTimeout, String namespace, Long maxWorkerId) {
+        super(maxWorkerId);
         this.zkAddress = zkAddress;
         this.sessionTimeout = sessionTimeout;
         this.connectTimeout = connectTimeout;
@@ -56,13 +57,20 @@ public class ZookeeperWorkerIdAssigner implements WorkerIdAssigner {
         if(children==null || children.isEmpty()) {
             return 0;
         }
+
         Collections.sort(children);
-        int id = 0;
+        int id = -1;
         for (int i=0; i<children.size(); i++) {
             if(node.endsWith(children.get(i))) {
                 id = i;
                 break;
             }
+        }
+
+        if(id > maxWorkerId) {
+            zkClient.delete(path);
+            this.close();
+            throw new IllegalStateException("woker id must <= "+ maxWorkerId);
         }
         return id;
     }
@@ -90,7 +98,7 @@ public class ZookeeperWorkerIdAssigner implements WorkerIdAssigner {
 
     public static void main(String[] args) {
 
-        ZookeeperWorkerIdAssigner assigner = new ZookeeperWorkerIdAssigner("127.0.0.1:2181", "/pg/uid/worker");
+        ZookeeperWorkerIdAssigner assigner = new ZookeeperWorkerIdAssigner("127.0.0.1:2181", "/pg/uid/worker", 1023L);
         System.out.println(assigner.getWorkId());
         assigner.close();
     }
