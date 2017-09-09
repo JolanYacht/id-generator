@@ -10,7 +10,7 @@ public class SimpleWorkerIdAssigner extends BaseWorkerIdAssigner {
 
     private final long id;
 
-    public SimpleWorkerIdAssigner(Long maxWorkerId, long id) {
+    public SimpleWorkerIdAssigner(int maxWorkerId, long id) {
         super(maxWorkerId);
         this.id = id;
     }

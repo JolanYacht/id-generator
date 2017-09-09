@@ -23,11 +23,11 @@ public class ZookeeperWorkerIdAssigner extends BaseWorkerIdAssigner {
     private ZkClient zkClient;
     private static final String PREFIX = "worker_";
 
-    public ZookeeperWorkerIdAssigner(String zkAddress, String namespace, Long maxWorkerId) {
+    public ZookeeperWorkerIdAssigner(String zkAddress, String namespace, int maxWorkerId) {
         this(zkAddress, 60 * 1000, 5000, namespace, maxWorkerId);
     }
 
-    public ZookeeperWorkerIdAssigner(String zkAddress, int sessionTimeout, int connectTimeout, String namespace, Long maxWorkerId) {
+    public ZookeeperWorkerIdAssigner(String zkAddress, int sessionTimeout, int connectTimeout, String namespace, int maxWorkerId) {
         super(maxWorkerId);
         this.zkAddress = zkAddress;
         this.sessionTimeout = sessionTimeout;
@@ -98,7 +98,7 @@ public class ZookeeperWorkerIdAssigner extends BaseWorkerIdAssigner {
 
     public static void main(String[] args) {
 
-        ZookeeperWorkerIdAssigner assigner = new ZookeeperWorkerIdAssigner("127.0.0.1:2181", "/pg/uid/worker", 1023L);
+        ZookeeperWorkerIdAssigner assigner = new ZookeeperWorkerIdAssigner("127.0.0.1:2181", "/pg/uid/worker", 1023);
         System.out.println(assigner.getWorkId());
         assigner.close();
     }

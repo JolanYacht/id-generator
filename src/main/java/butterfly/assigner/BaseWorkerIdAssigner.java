@@ -4,13 +4,13 @@ package butterfly.assigner;
  * @author Ricky Fung
  */
 public abstract class BaseWorkerIdAssigner implements WorkerIdAssigner {
-    protected Long maxWorkerId;
+    protected int maxWorkerId;
 
-    public BaseWorkerIdAssigner(Long maxWorkerId) {
+    public BaseWorkerIdAssigner(int maxWorkerId) {
         this.maxWorkerId = maxWorkerId;
     }
 
-    public Long getMaxWorkerId() {
+    public int getMaxWorkerId() {
         return maxWorkerId;
     }
 }
