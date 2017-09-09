@@ -12,12 +12,13 @@ import org.junit.Test;
  * ${DESCRIPTION}
  *
  * @author Ricky Fung
- * @create 2017-04-27 20:59
  */
 public class SnowflakeIdGeneratorTest {
     long epoch = 1480521600000L;
     int workerIdBits = 10;
     int sequenceBits = 12;
+
+    int workerId = 0;
 
     @Test
     @Ignore
@@ -35,7 +36,7 @@ public class SnowflakeIdGeneratorTest {
     public void testSimpleIdAssigner(){
 
         IdGenerator idGenerator = new SnowflakeIdGenerator(epoch, workerIdBits, sequenceBits,
-                new SimpleWorkerIdAssigner(1<<workerIdBits, 0));
+                new SimpleWorkerIdAssigner(1<<workerIdBits, workerId));
 
         long uid = idGenerator.getUid();
         UidMetaData meta = idGenerator.parseUid(uid);

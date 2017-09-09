@@ -4,9 +4,7 @@ import butterfly.domain.UidMetaData;
 
 /**
  * 全局唯一id生成器
- *
  * @author Ricky Fung
- * @create 2017-04-27 21:05
  */
 public interface IdGenerator {
 

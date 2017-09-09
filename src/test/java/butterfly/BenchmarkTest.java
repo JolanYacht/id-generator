@@ -9,7 +9,6 @@ import org.junit.Test;
  * ${DESCRIPTION}
  *
  * @author Ricky Fung
- * @create 2016-12-19 18:12
  */
 public class BenchmarkTest {
     long epoch = 1480521600000L;
