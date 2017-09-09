@@ -35,7 +35,7 @@ public class SnowflakeIdGeneratorTest {
     public void testSimpleIdAssigner(){
 
         IdGenerator idGenerator = new SnowflakeIdGenerator(epoch, workerIdBits, sequenceBits,
-                new SimpleWorkerIdAssigner(1<<workerIdBits, 0L));
+                new SimpleWorkerIdAssigner(1<<workerIdBits, 0));
 
         long uid = idGenerator.getUid();
         UidMetaData meta = idGenerator.parseUid(uid);
@@ -44,6 +44,7 @@ public class SnowflakeIdGeneratorTest {
         uid = idGenerator.getUid();
         meta = idGenerator.parseUid(uid);
         System.out.println(uid+"\t"+meta);
+
     }
 
 

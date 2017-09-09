@@ -7,5 +7,5 @@ package butterfly.assigner;
  */
 public interface WorkerIdAssigner {
 
-    long getWorkId();
+    int getWorkId();
 }

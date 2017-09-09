@@ -15,7 +15,7 @@ public class SnowflakeIdGenerator implements IdGenerator {
     private final int workerIdBits;   //机器标识位数
     private final int sequenceBits;  //毫秒内自增位
 
-    private final int maxWorkerId;   //机器ID最大值
+    private final long maxWorkerId;   //机器ID最大值
 
     private final int workerIdLeftShiftBits;    //机器ID偏左移位数
     private final int timestampLeftShiftBits; //时间毫秒左移位数
@@ -34,7 +34,7 @@ public class SnowflakeIdGenerator implements IdGenerator {
         this.epoch = epoch;
         this.workerIdBits = workerIdBits;
         this.sequenceBits = sequenceBits;
-        this.maxWorkerId = (int) (-1L ^ (-1L << workerIdBits));
+        this.maxWorkerId = -1L ^ (-1L << workerIdBits);
 
         this.timestampLeftShiftBits = workerIdBits + sequenceBits;
         this.workerIdLeftShiftBits = sequenceBits;

@@ -37,7 +37,7 @@ public class ZookeeperWorkerIdAssigner extends BaseWorkerIdAssigner {
     }
 
     @Override
-    public long getWorkId() {
+    public int getWorkId() {
 
         //创建根节点
         zkClient.createPersistent(namespace, true);

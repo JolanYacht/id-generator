@@ -22,7 +22,7 @@ public class BenchmarkTest {
     public void testSnowflake() {
 
         IdGenerator idGenerator = new SnowflakeIdGenerator(epoch, workerIdBits, sequenceBits,
-                new SimpleWorkerIdAssigner(1<<workerIdBits, 0L));
+                new SimpleWorkerIdAssigner(1<<workerIdBits, 0));
         long start = System.currentTimeMillis();
         for (int i=0; i<count; i++) {
             idGenerator.getUid();

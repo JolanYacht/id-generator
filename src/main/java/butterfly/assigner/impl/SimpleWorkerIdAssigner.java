@@ -8,15 +8,15 @@ import butterfly.assigner.BaseWorkerIdAssigner;
  */
 public class SimpleWorkerIdAssigner extends BaseWorkerIdAssigner {
 
-    private final long id;
+    private final int id;
 
-    public SimpleWorkerIdAssigner(int maxWorkerId, long id) {
+    public SimpleWorkerIdAssigner(int maxWorkerId, int id) {
         super(maxWorkerId);
         this.id = id;
     }
 
     @Override
-    public long getWorkId() {
+    public int getWorkId() {
         return id;
     }
 }
