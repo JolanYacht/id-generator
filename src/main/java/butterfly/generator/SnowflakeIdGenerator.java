@@ -1,6 +1,7 @@
 package butterfly.generator;
 
 import butterfly.assigner.WorkerIdAssigner;
+import butterfly.domain.UidMetaData;
 
 /**
  * Twitter Snowflake
@@ -64,17 +65,17 @@ public class SnowflakeIdGenerator implements IdGenerator {
     }
 
     @Override
-    public String parseUid(long uid) {
+    public UidMetaData parseUid(long uid) {
 
-        long tt = (uid >> TIMESTAMP_LEFT_SHIFT_BITS) + epoch;
+        long ts = (uid >> TIMESTAMP_LEFT_SHIFT_BITS) + epoch;
         long worker = (uid >> WORKER_ID_LEFT_SHIFT_BITS) & ((1 << WORKER_ID_BITS) - 1);
         long seq = uid & SEQUENCE_MASK;
 
-        StringBuilder sb = new StringBuilder(128);
-        sb.append('{').append('"').append("timestamp").append('"').append(':').append(tt).append(',')
-                .append('"').append("workerId").append('"').append(':').append(worker).append(',')
-                .append('"').append("sequence").append('"').append(':').append(seq).append('}');
-        return sb.toString();
+        UidMetaData metaData = new UidMetaData();
+        metaData.setTimestamp(ts);
+        metaData.setWorkerId(worker);
+        metaData.setSequence(seq);
+        return metaData;
     }
 
     private long waitUntilNextMillis(long lastTimestamp) {

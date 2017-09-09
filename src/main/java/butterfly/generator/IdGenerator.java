@@ -1,5 +1,7 @@
 package butterfly.generator;
 
+import butterfly.domain.UidMetaData;
+
 /**
  * 全局唯一id生成器
  *
@@ -19,5 +21,5 @@ public interface IdGenerator {
      * @param uid
      * @return
      */
-    String parseUid(long uid);
+    UidMetaData parseUid(long uid);
 }

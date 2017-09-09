@@ -70,7 +70,7 @@ public class ZookeeperWorkerIdAssigner extends BaseWorkerIdAssigner {
         if(id > maxWorkerId) {
             zkClient.delete(path);
             this.close();
-            throw new IllegalStateException("woker id must <= "+ maxWorkerId);
+            throw new IllegalStateException("worker id must <= "+ maxWorkerId);
         }
         return id;
     }
@@ -88,10 +88,10 @@ public class ZookeeperWorkerIdAssigner extends BaseWorkerIdAssigner {
 
     private String getHostInfo() {
         InetAddress address = NetUtils.getLocalAddress();
-        String ip = "N/A";
-        if(address!=null) {
-            ip = NetUtils.getLocalAddress().getHostAddress();
+        if(address==null) {
+            throw new RuntimeException("can not acquire local ip");
         }
+        String ip = NetUtils.getLocalAddress().getHostAddress();
         int pid = NetUtils.getPid();
         return String.format("%s:%s", ip, pid);
     }

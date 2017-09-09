@@ -2,6 +2,7 @@ package butterfly;
 
 import butterfly.assigner.impl.SimpleWorkerIdAssigner;
 import butterfly.assigner.impl.ZookeeperWorkerIdAssigner;
+import butterfly.domain.UidMetaData;
 import butterfly.generator.IdGenerator;
 import butterfly.generator.SnowflakeIdGenerator;
 import org.junit.Ignore;
@@ -22,8 +23,8 @@ public class SnowflakeIdGeneratorTest {
         IdGenerator idGenerator = new SnowflakeIdGenerator(new ZookeeperWorkerIdAssigner("127.0.0.1:2181", "/pg/uid/worker", (long) (1<<12)), 1480521600000L);
 
         long uid = idGenerator.getUid();
-        String extra = idGenerator.parseUid(uid);
-        System.out.println(extra);
+        UidMetaData extra = idGenerator.parseUid(uid);
+        System.out.println(uid+"\t"+extra);
     }
 
     @Test
@@ -32,14 +33,12 @@ public class SnowflakeIdGeneratorTest {
         IdGenerator idGenerator = new SnowflakeIdGenerator(new SimpleWorkerIdAssigner((long) (1<<12), 0L), 1480521600000L);
 
         long uid = idGenerator.getUid();
-        String extra = idGenerator.parseUid(uid);
+        UidMetaData extra = idGenerator.parseUid(uid);
         System.out.println(uid+"\t"+extra);
 
         uid = idGenerator.getUid();
         extra = idGenerator.parseUid(uid);
         System.out.println(uid+"\t"+extra);
-
-        System.out.println("timestamp:"+System.currentTimeMillis());
     }
 
 
