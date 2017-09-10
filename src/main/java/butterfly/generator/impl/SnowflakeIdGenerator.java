@@ -1,7 +1,7 @@
 package butterfly.generator.impl;
 
 import butterfly.assigner.WorkerIdAssigner;
-import butterfly.domain.UidMetaData;
+import butterfly.domain.IdMetaData;
 import butterfly.generator.IdGenerator;
 
 /**
@@ -51,7 +51,7 @@ public class SnowflakeIdGenerator implements IdGenerator {
     }
 
     @Override
-    public synchronized long getUid() {
+    public synchronized long genId() {
         long timestamp = timeGen();
         if (timestamp < lastTimestamp) {
             throw new RuntimeException(String.format("Clock moved backwards.  Refusing to generate id for %d milliseconds", lastTimestamp - timestamp));
@@ -70,13 +70,22 @@ public class SnowflakeIdGenerator implements IdGenerator {
     }
 
     @Override
-    public UidMetaData parseUid(long uid) {
+    public long[] genBatchIds(int num) {
+        long[] arr = new long[num];
+        for (int i=0; i<num; i++) {
+            arr[i] = genId();
+        }
+        return arr;
+    }
+
+    @Override
+    public IdMetaData parseUid(long uid) {
 
         long ts = (uid >> timestampLeftShiftBits) + epoch;
         long worker = (uid >> workerIdLeftShiftBits) & ((1 << workerIdBits) - 1);
         long seq = uid & sequenceMask;
 
-        UidMetaData metaData = new UidMetaData();
+        IdMetaData metaData = new IdMetaData();
         metaData.setTimestamp(ts);
         metaData.setWorkerId(worker);
         metaData.setSequence(seq);

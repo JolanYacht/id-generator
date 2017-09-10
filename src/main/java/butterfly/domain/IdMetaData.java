@@ -3,7 +3,7 @@ package butterfly.domain;
 /**
  * @author Ricky Fung
  */
-public class UidMetaData {
+public class IdMetaData {
     private long timestamp;
     private long workerId;
     private long sequence;
@@ -34,7 +34,7 @@ public class UidMetaData {
 
     @Override
     public String toString() {
-        return "UidMetaData{" +
+        return "IdMetaData{" +
                 "timestamp=" + timestamp +
                 ", workerId=" + workerId +
                 ", sequence=" + sequence +

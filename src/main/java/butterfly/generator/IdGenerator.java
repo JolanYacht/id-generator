@@ -1,23 +1,29 @@
 package butterfly.generator;
 
-import butterfly.domain.UidMetaData;
+import butterfly.domain.IdMetaData;
 
 /**
- * 全局唯一id生成器
  * @author Ricky Fung
  */
 public interface IdGenerator {
 
     /**
-     * 获取uid
+     * generate single id
      * @return
      */
-    long getUid();
+    long genId();
 
     /**
-     * 解析uid包含的信息：[Timestamp, WorkerId, Sequence]
+     * generate batch id
+     * @param num
+     * @return
+     */
+    long[] genBatchIds(int num);
+
+    /**
+     * parse id meta data info include：[timestamp, workerId, sequence]
      * @param uid
      * @return
      */
-    UidMetaData parseUid(long uid);
+    IdMetaData parseUid(long uid);
 }
